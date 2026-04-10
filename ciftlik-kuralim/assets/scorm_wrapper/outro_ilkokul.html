@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oyun Outro (Bitiş)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: transparent;
+            font-family: 'Nunito', sans-serif;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #scaler {
+            width: 1920px;
+            height: 1080px;
+            position: absolute;
+            transform-origin: top left;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Final Animation Full Screen Overlay */
+        #final-animation-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        #lottie-final {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Outro Card Overlay */
+        .outro-card {
+            background-color: #fff;
+            border: 4px solid #14B8C7;
+            border-radius: 40px;
+            padding: 50px 80px;
+            opacity: 0;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            max-width: 1000px;
+            width: 90%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            gap: 50px;
+            z-index: 1;
+            transition: opacity 0.5s ease-in-out;
+            pointer-events: none;
+        }
+
+        .outro-card.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .content-side {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .title {
+            color: #14B8C7;
+            font-size: 52px;
+            font-weight: 800;
+            margin: 0 0 35px 0;
+        }
+
+        .score-pill {
+            background-color: #14B8C7;
+            color: white;
+            border-radius: 40px;
+            padding: 15px 45px;
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 42px;
+            font-weight: 800;
+            width: fit-content;
+            margin-bottom: 40px;
+        }
+
+        .score-pill .fa-star {
+            font-size: 36px;
+            color: #FFD700;
+        }
+
+        .message {
+            color: #2c3e50;
+            font-size: 32px;
+            font-weight: 600;
+            margin: 0 0 50px 0;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 30px;
+        }
+
+        button {
+            font-family: 'Nunito', sans-serif;
+            font-size: 26px;
+            font-weight: 700;
+            padding: 18px 40px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            color: white;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-retry {
+            background-color: #14B8C7;
+        }
+
+        .btn-exit {
+            background-color: #E2006A;
+        }
+
+        .animation-side {
+            width: 400px;
+            height: 400px;
+            flex-shrink: 0;
+        }
+
+        #lottie-outro {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="scaler">
+        <div id="final-animation-container">
+            <div id="lottie-final"></div>
+        </div>
+
+        <div class="outro-card" id="outro-card">
+            <div class="content-side">
+                <h1 class="title">TEBRİKLER!</h1>
+                <div class="score-pill">
+                    <span id="finalScore">0</span>/<span id="maxScore">20</span>
+                    <i class="fas fa-star"></i>
+                </div>
+                <p class="message">Oyunu başarıyla tamamladın.</p>
+                <div class="buttons">
+                    <button class="btn-retry" onclick="retryGame()">
+                        <i class="fas fa-redo"></i> Tekrar Oyna
+                    </button>
+                    <button class="btn-exit" onclick="exitGame()">
+                        Çıkış Yap <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="animation-side">
+                <div id="lottie-outro"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function resizeOutro() {
+            const scaler = document.getElementById('scaler');
+            const targetWidth = 1920;
+            const targetHeight = 1080;
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+
+            const scaleX = windowWidth / targetWidth;
+            const scaleY = windowHeight / targetHeight;
+            let scale = Math.min(scaleX, scaleY);
+
+            scaler.style.transform = "scale(" + scale + ")";
+            const scaledWidth = targetWidth * scale;
+            const scaledHeight = targetHeight * scale;
+            scaler.style.left = ((windowWidth - scaledWidth) / 2) + "px";
+            scaler.style.top = ((windowHeight - scaledHeight) / 2) + "px";
+        }
+
+        window.addEventListener('resize', resizeOutro);
+        resizeOutro();
+
+
+
+        document.getElementById('final-animation-container').style.display = 'none';
+
+        var animOutro = lottie.loadAnimation({
+            container: document.getElementById('lottie-outro'),
+            renderer: 'svg',
+            loop: true,
+            autoplay: true,
+            path: "../animasyonlar/outro_ilkokul.json"
+        });
+        animOutro.setSpeed(1);
+
+        const outroCard = document.getElementById('outro-card');
+        outroCard.classList.add('visible');
+
+        function setScore(score, maxScore = 20) {
+            document.getElementById('finalScore').textContent = score;
+            document.getElementById('maxScore').textContent = maxScore;
+
+            const ratio = score / maxScore;
+            const messageEl = document.querySelector('.message');
+
+            if (ratio >= 0.9) {
+                messageEl.textContent = "Harika! Mükemmel bir performans sergiledin.";
+            } else if (ratio >= 0.7) {
+                messageEl.textContent = "Tebrikler! Çok iyi bir sonuç aldın.";
+            } else if (ratio >= 0.5) {
+                messageEl.textContent = "Güzel! Başarıyla tamamladın.";
+            } else {
+                messageEl.textContent = "Tamamlandı. Biraz daha pratik yapabilirsin.";
+            }
+
+            if (typeof window.parent !== 'undefined' && window.parent.setSCORMScore) {
+                window.parent.setSCORMScore(score);
+            }
+        }
+
+        function retryGame() {
+            if (window.parent) {
+                window.parent.location.reload();
+            } else {
+                window.location.href = '../../index.html';
+            }
+        }
+
+        function exitGame() {
+            if (typeof window.parent !== 'undefined' && window.parent.GLOBAL_CIKIS_LINK) {
+                window.parent.location.href = window.parent.GLOBAL_CIKIS_LINK;
+            } else if (typeof window.parent !== 'undefined' && window.parent.exitDersligGame) {
+                window.parent.exitDersligGame();
+            } else {
+                console.log('Oyundan çıkış yapıldı, anasayfaya yönlendiriliyor.');
+                if (window.parent) {
+                    window.parent.location.href = "../../index.html";
+                }
+            }
+        }
+
+        window.onload = function () {
+            // v168: Only default to 0 if NOT already set by parent setScore call
+            if (document.getElementById('finalScore').textContent === "0") {
+                const savedScore = localStorage.getItem('derslig_game_score');
+                const savedMaxScore = localStorage.getItem('derslig_game_max_score');
+
+                if (savedScore !== null && savedMaxScore !== null) {
+                    setScore(parseInt(savedScore), parseInt(savedMaxScore));
+                    localStorage.removeItem('derslig_game_score');
+                    localStorage.removeItem('derslig_game_max_score');
+                } else {
+                    setScore(0, 20);
+                }
+            }
+        };
+
+    </script>
+</body>
+
+</html>

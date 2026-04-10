@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>etkileşimli konu simülasyonu orta okul</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #fff;
+        }
+
+        #scaler {
+            width: 1920px;
+            height: 1080px;
+            position: absolute;
+            transform-origin: top left;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #game-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #lottie-animation {
+            width: 100%;
+            height: 100%;
+        }
+
+        #start-section {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: transparent;
+            z-index: 10;
+        }
+
+        .start-btn {
+            padding: 20px 80px;
+            font-size: 3rem;
+            font-weight: 800;
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #FF9F43 0%, #FF6B6B 100%);
+            color: white;
+            border: 4px solid #fff;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s;
+        }
+
+        .start-btn:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="scaler">
+
+        <div id="lottie-animation"></div>
+        <script>
+
+            var animation = lottie.loadAnimation({
+                container: document.getElementById("lottie-animation"),
+                renderer: "svg", loop: false, autoplay: true,
+                path: "../animasyonlar/intro_ortaokul.json"
+            });
+            animation.setSpeed(1);
+
+            function resizeGame() {
+                const scaler = document.getElementById('scaler');
+                const windowWidth = window.innerWidth;
+                const windowHeight = window.innerHeight;
+
+                const scaleX = windowWidth / 1920;
+                const scaleY = windowHeight / 1080;
+                const scale = Math.min(scaleX, scaleY);
+
+                // Center the scaler
+                const left = (windowWidth - (1920 * scale)) / 2;
+                const top = (windowHeight - (1080 * scale)) / 2;
+
+                if (scaler) {
+                    scaler.style.transform = `scale(${scale})`;
+                    scaler.style.left = `${left}px`;
+                    scaler.style.top = `${top}px`;
+                }
+            }
+
+            window.addEventListener('resize', resizeGame);
+            resizeGame(); // Initial call
+
+            let redirected = false;
+            function startGame() {
+                if (redirected) return;
+                redirected = true;
+                window.parent.postMessage('introEnded', '*');
+            }
+
+            // Lottie and Audio logic
+            if (typeof animation !== 'undefined') {
+                const introAudio = new Audio('../../assets/audio/intro_ortaokul.mp3');
+
+                // Try to play audio when animation starts
+                introAudio.play().catch(e => console.log('Audio autoplay prevented:', e));
+
+                animation.addEventListener('complete', () => {
+                    startGame();
+                });
+            }
+
+            // Fallback explicit delay to ensure we transition
+            setTimeout(() => {
+                startGame();
+            }, 8000);
+        </script>
+    </div>
+</body>
+
+</html>

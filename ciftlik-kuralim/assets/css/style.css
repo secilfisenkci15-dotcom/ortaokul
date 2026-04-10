@@ -1,0 +1,300 @@
+/* 
+   Derslig Oyun Standart Stilleri 
+   Sürüm: 2.0 (1920x1080 Fixed)
+*/
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+
+:root {
+    --header-height: 80px;
+    --primary-color: #0DBFC7;
+    --text-color: #333;
+    --bg-color: #f0f4f8;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #ffffff;
+    /* Oyun dışı kalan alanlar için koyu renk */
+    overflow: hidden;
+    /* Scroll engelle */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Nunito', sans-serif;
+}
+
+/* 
+   OYUN KAPSAYICISI 
+   Bu alan JS tarafından otomatik scale edilecek.
+   İçerik geliştiriciler sadece 1920x1080'e göre çalışacak.
+*/
+#game-wrapper {
+    position: relative;
+    width: 1920px;
+    height: 1080px;
+    background-color: white;
+    overflow: hidden;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+}
+
+/* OTOMATİK OLUŞTURULAN HEADER (Klasik Derslig SDK Style) */
+#derslig-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--header-height);
+    background: #0DBFC7;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    z-index: 9999;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.game-title {
+    font-size: 32px;
+    font-weight: 800;
+    color: white;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.header-logo {
+    height: 35px;
+    width: auto;
+    margin-right: 15px;
+    user-select: none;
+}
+
+.ctrl-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 24px;
+    color: white;
+    transition: all 0.2s;
+}
+
+.ctrl-btn:hover {
+    background: white;
+    color: #0DBFC7;
+    border-color: white;
+    transform: translateY(-2px);
+}
+
+/* OYUN ALANI (Game Area) */
+#game-area {
+    position: absolute;
+    top: var(--header-height);
+    left: 0;
+    width: 100%;
+    height: calc(1080px - var(--header-height));
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 28px;
+    /* Varsayılan font boyutunu artırdık */
+}
+
+/* GENEL TİPOGRAFİ STANDARTLARI */
+#game-area h1,
+.h1 {
+    font-size: 48px;
+    font-weight: 800;
+    margin-bottom: 20px;
+    color: var(--text-color);
+}
+
+#game-area h2,
+.h2 {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: var(--text-color);
+}
+
+#game-area h3,
+.h3 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--text-color);
+}
+
+#game-area p,
+.text {
+    font-size: 26px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    color: var(--text-color);
+}
+
+/* GENEL BUTON STANDARTLARI */
+.btn {
+    font-size: 28px;
+    font-weight: 800;
+    padding: 15px 40px;
+    border-radius: 15px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-family: 'Nunito', sans-serif;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+    box-shadow: 0 6px 0 #31D5DE;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 0 #31D5DE;
+}
+
+.btn-primary:active {
+    transform: translateY(4px);
+    box-shadow: 0 2px 0 #31D5DE;
+}
+
+/* BITIŞ EKRANI / NEXT BUTONU */
+#next-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.9);
+    display: none;
+    /* JS ile açılacak */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
+
+.next-btn {
+    background: var(--primary-color);
+    color: white;
+    font-size: 48px;
+    padding: 20px 60px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 10px 25px rgba(76, 175, 80, 0.4);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Bilgi Modalı */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10001;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.info-content {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    max-width: 800px;
+    text-align: center;
+    font-size: 24px;
+}
+
+#start-game-btn:hover {
+    transform: scale(1.05);
+}
+
+/* ====== KaTeX FONT ÖZELLEŞTİRME ====== */
+
+/* KaTeX'in ana metin fontunu Nunito ile değiştir */
+/* unicode-range: Sayılar + Latin harfler (matematik sembolleri hariç) */
+@font-face {
+    font-family: 'KaTeX_Main';
+    src: url('https://fonts.gstatic.com/s/nunito/v26/XRXI3I6Li01BKofiOc5wtlZ2di8HDLshRTY9jo7eTWk.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    unicode-range: U+0030-0039, U+0041-005A, U+0061-007A, U+00C0-024F, U+0400-04FF;
+}
+
+@font-face {
+    font-family: 'KaTeX_Main';
+    src: url('https://fonts.gstatic.com/s/nunito/v26/XRXI3I6Li01BKofiOc5wtlZ2di8HDLshRTY9jo7eTWk.woff2') format('woff2');
+    font-weight: bold;
+    font-style: normal;
+    unicode-range: U+0030-0039, U+0041-005A, U+0061-007A, U+00C0-024F, U+0400-04FF;
+}
+
+@font-face {
+    font-family: 'KaTeX_Main';
+    src: url('https://fonts.gstatic.com/s/nunito/v26/XRXI3I6Li01BKofiOc5wtlZ2di8HDLshRTY9jo7eTWk.woff2') format('woff2');
+    font-weight: normal;
+    font-style: italic;
+    unicode-range: U+0030-0039, U+0041-005A, U+0061-007A, U+00C0-024F, U+0400-04FF;
+}
+
+@font-face {
+    font-family: 'KaTeX_Math';
+    src: url('https://fonts.gstatic.com/s/nunito/v26/XRXI3I6Li01BKofiOc5wtlZ2di8HDLshRTY9jo7eTWk.woff2') format('woff2');
+    font-weight: normal;
+    font-style: italic;
+    unicode-range: U+0030-0039, U+0041-005A, U+0061-007A, U+00C0-024F;
+}
+
+/* Font boyutunu ebeveyn elemente eşitle */
+.katex {
+    font-size: 1em !important;
+}
